@@ -1,43 +1,41 @@
 import { Injectable } from '@nestjs/common';
-import { Task, TaskStatus } from './tasks.model';
-import * as uuid from 'uuid/v1';
+import { Task, TaskStatus } from './model/tasks.model';
 import { CreateTaskDto } from './dto/create-task.dto';
+import { InjectModel } from 'nestjs-typegoose';
+import { ReturnModelType } from '@typegoose/typegoose';
 
 @Injectable()
 export class TasksService {
-  private tasks: Array<Task> = [];
+  constructor(
+    @InjectModel(Task) private readonly taskModel: ReturnModelType<typeof Task>,
+  ) {}
 
-  getAllTasks(): Array<Task> {
-    return this.tasks;
+  async getAllTasks(): Promise<Array<Task>> {
+    return await this.taskModel.find().lean();
   }
 
-  createTask(creatTaskDto: CreateTaskDto): Task {
-    const task: Task = {
-      id: uuid(),
+  createTask(creatTaskDto: CreateTaskDto): Promise<Task> {
+    const task = new this.taskModel({
       title: creatTaskDto.title,
       description: creatTaskDto.description,
-      status: TaskStatus.OPEN,
-    };
-    this.tasks.push(task);
-    return task;
+      status: creatTaskDto.taskStatus || TaskStatus.OPEN,
+    });
+    return task.save();
   }
 
-  getTaskById(id: string): Task {
-    return this.tasks.find(item => item.id === id);
+  async getTaskById(id: string): Promise<Task> {
+    return await this.taskModel.findOne({ _id: id }).lean();
   }
 
-  deleteTaskById(id: string): Task {
-    const itemToDelete = this.tasks.find(task => task.id === id);
-    const index = this.tasks.findIndex(task => task.id === id);
-    this.tasks.splice(index, 1);
-    return itemToDelete;
+  async deleteTaskById(id: string): Promise<Task> {
+    return await this.taskModel.findOneAndDelete({ _id: id }).lean();
   }
 
-  updateTaskById(id: string): Task {
-    const itemToUpdate = this.tasks.find(task => task.id === id);
-    itemToUpdate.status = TaskStatus.IN_PROGRESS;
-    this.tasks = this.tasks.filter(task => task.id !== id);
-    this.tasks.push(itemToUpdate);
-    return itemToUpdate;
+  async updateTaskById(id: string, taskStatus: TaskStatus): Promise<Task> {
+    return await this.taskModel.findOneAndUpdate(
+      { _id: id },
+      { taskStatus },
+      { new: true },
+    );
   }
 }
