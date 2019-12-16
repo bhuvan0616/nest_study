@@ -8,13 +8,14 @@ import { ReturnModelType } from '@typegoose/typegoose';
 export class TasksService {
   constructor(
     @InjectModel(Task) private readonly taskModel: ReturnModelType<typeof Task>,
-  ) {}
-
-  async getAllTasks(): Promise<Array<Task>> {
-    return await this.taskModel.find().lean();
+  ) {
   }
 
-  createTask(creatTaskDto: CreateTaskDto): Promise<Task> {
+   async getAllTasks(): Promise<Array<Task>> {
+    return this.taskModel.find().lean();
+  }
+
+   async createTask(creatTaskDto: CreateTaskDto): Promise<Task> {
     const task = new this.taskModel({
       title: creatTaskDto.title,
       description: creatTaskDto.description,
@@ -24,15 +25,15 @@ export class TasksService {
   }
 
   async getTaskById(id: string): Promise<Task> {
-    return await this.taskModel.findOne({ _id: id }).lean();
+    return this.taskModel.findOne({ _id: id }).lean();
   }
 
   async deleteTaskById(id: string): Promise<Task> {
-    return await this.taskModel.findOneAndDelete({ _id: id }).lean();
+    return this.taskModel.deleteOne({ _id: id }).lean();
   }
 
   async updateTaskById(id: string, taskStatus: TaskStatus): Promise<Task> {
-    return await this.taskModel.findOneAndUpdate(
+    return this.taskModel.findOneAndUpdate(
       { _id: id },
       { taskStatus },
       { new: true },
