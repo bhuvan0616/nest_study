@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TasksModule } from './tasks/tasks.module';
 import { TypegooseModule } from 'nestjs-typegoose';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -8,10 +9,12 @@ import { TypegooseModule } from 'nestjs-typegoose';
       'mongodb+srv://bhuvan:bhuvan123456@bhuvan-hukj2.mongodb.net/test',
       {
         useNewUrlParser: true,
-        useUnifiedTopology:true
-      }
+        useUnifiedTopology: true,
+      },
     ),
     TasksModule,
+    AuthModule,
   ],
 })
-export class AppModule {}
+export class AppModule {
+}

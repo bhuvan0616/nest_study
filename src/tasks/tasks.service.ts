@@ -11,11 +11,11 @@ export class TasksService {
   ) {
   }
 
-   async getAllTasks(): Promise<Array<Task>> {
+  async getAllTasks(): Promise<Array<Task>> {
     return this.taskModel.find().lean();
   }
 
-   async createTask(creatTaskDto: CreateTaskDto): Promise<Task> {
+  async createTask(creatTaskDto: CreateTaskDto): Promise<Task> {
     const task = new this.taskModel({
       title: creatTaskDto.title,
       description: creatTaskDto.description,
