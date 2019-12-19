@@ -16,14 +16,15 @@ import { TaskStatusValidationPipe } from './pipes/task-status-validation.pipe';
 
 @Controller('tasks')
 export class TasksController {
-  constructor(private taskServices: TasksService) {}
+  constructor(private taskServices: TasksService) {
+  }
 
   @Get()
   getAllTasks(): Promise<Array<Task>> {
     return this.taskServices.getAllTasks();
   }
 
-  @Post()
+  @Post('create')
   @UsePipes(ValidationPipe)
   createTask(@Body() createTaskDto: CreateTaskDto): Promise<Task> {
     return this.taskServices.createTask(createTaskDto);

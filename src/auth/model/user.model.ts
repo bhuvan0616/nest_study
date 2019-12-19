@@ -7,9 +7,9 @@ export class User {
   @prop({ required: true })
   email: string;
 
-  @prop({ required: true, select: false })
+  @prop({ required: true })
   password: string;
 
-  @prop({ required: true })
+  @prop()
   token: string;
 }
