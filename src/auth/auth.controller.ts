@@ -1,8 +1,9 @@
-import { Body, Controller, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { AuthService } from './auth.service';
 import { VerifyUserDto } from './dto/verify-user.dto';
 import { User } from './model/user.model';
+import { myDeco } from './decorators/docorators';
 
 @Controller('auth')
 export class AuthController {
@@ -19,5 +20,10 @@ export class AuthController {
   @UsePipes(ValidationPipe)
   login(@Body() verifyUserDto: VerifyUserDto): Promise<User> {
     return this.authService.verifyUser(verifyUserDto);
+  }
+
+  @Get('test')
+  test(@myDeco() hey: string): string {
+    return 'hello';
   }
 }
