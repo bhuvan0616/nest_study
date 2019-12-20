@@ -1,6 +1,10 @@
 import { prop } from '@typegoose/typegoose';
 
 export class User {
+
+  // tslint:disable-next-line:variable-name
+  _id: string;
+
   @prop({ required: true })
   username: string;
 

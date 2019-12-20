@@ -17,8 +17,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
+  // noinspection JSUnusedGlobalSymbols
   async validate(payload: JwtPayload): Promise<User> {
-    const user = await this.userModel.findOne({ username: payload.username }).lean();
+    const user = await this.userModel.findOne({ username: payload.username }, '-password').lean();
     if (!user) {
       throw new UnauthorizedException();
     }
