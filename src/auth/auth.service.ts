@@ -5,7 +5,7 @@ import { ReturnModelType } from '@typegoose/typegoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import { VerifyUserDto } from './dto/verify-user.dto';
-import { compare, hash } from 'bcrypt';
+import { compare, hash } from 'bcryptjs';
 
 @Injectable()
 export class AuthService {
